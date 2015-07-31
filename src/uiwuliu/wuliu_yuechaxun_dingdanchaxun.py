@@ -1,0 +1,76 @@
+# -*- coding: utf-8 -*-
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import Select
+from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoAlertPresentException
+import unittest, time, re
+
+class WuliuYuechaxunDingdanchaxun(unittest.TestCase):
+    def setUp(self):
+        self.driver = webdriver.Firefox()
+        self.driver.implicitly_wait(30)
+        self.base_url = "http://wuliu03.edaixi.cn/"    
+        self.verificationErrors = []
+        self.accept_next_alert = True
+    
+    def test_wuliu_yuechaxun_dingdanchaxun(self):
+        driver = self.driver
+        driver.get(self.base_url + "/")
+        driver.find_element_by_link_text(u"登录").click()
+        driver.find_element_by_id("username").clear()
+        driver.find_element_by_id("username").send_keys("test")
+        driver.find_element_by_id("password").clear()
+        driver.find_element_by_id("password").send_keys("test")
+        driver.find_element_by_id("login-submit").click()
+        driver.find_element_by_link_text(u"余额查询").click()
+        driver.find_element_by_id("sn_code").clear()
+        driver.find_element_by_id("sn_code").send_keys("100000066882")
+        driver.find_element_by_name("commit").click()
+     
+        driver.find_element_by_link_text(u"加工店订单查询").click()
+        Select(driver.find_element_by_id("is_fanxi")).select_by_visible_text(u"是")
+        driver.find_element_by_name("commit").click()
+        driver.find_element_by_link_text("12242816019130").click()
+           # get curruent windows handles
+        winBeforeHandle = driver.current_window_handle
+        print "winBeforeHandle==",winBeforeHandle
+        
+        winHandles = driver.window_handles
+        print "winHandles==",winHandles
+
+        for handle in winHandles:
+            if winBeforeHandle != handle:
+               driver.switch_to_window(handle)
+
+        print driver.title
+        
+        
+    def is_element_present(self, how, what):
+        try: self.driver.find_element(by=how, value=what)
+        except NoSuchElementException, e: return False
+        return True
+    
+    def is_alert_present(self):
+        try: self.driver.switch_to_alert()
+        except NoAlertPresentException, e: return False
+        return True
+    
+    def close_alert_and_get_its_text(self):
+        try:
+            alert = self.driver.switch_to_alert()
+            alert_text = alert.text
+            if self.accept_next_alert:
+                alert.accept()
+            else:
+                alert.dismiss()
+            return alert_text
+        finally: self.accept_next_alert = True
+    
+    def tearDown(self):
+        #self.driver.quit()
+        self.assertEqual([], self.verificationErrors)
+
+if __name__ == "__main__":
+    unittest.main()
