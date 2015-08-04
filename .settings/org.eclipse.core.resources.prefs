@@ -1,4 +1,5 @@
 eclipse.preferences.version=1
+encoding//src/all/DBConnect.py=utf-8
 encoding//src/all/HttpGetAutoRecord.py=utf-8
 encoding//src/all/PythonDateTime.py=utf-8
 encoding//src/all/Widget_server_case.py=utf-8
