@@ -23,8 +23,8 @@ class CaiwuHuiyuancardquery(unittest.TestCase):
            USER_NAME = lineone[1]
            PASS_WORD = lineone[2]
            print CAIWU_URL+USER_NAME+PASS_WORD
-        self.base_url = CAIWU_URL
-        #self.base_url = "http://caiwu03.edaixi.cn/"
+        #self.base_url = CAIWU_URL
+        self.base_url = "http://caiwu03.edaixi.cn/"
         self.verificationErrors = []
         self.accept_next_alert = True
     
